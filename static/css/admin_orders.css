@@ -1,0 +1,25 @@
+.btn-primary, .btn-secondary {
+    color:white;
+    background-color: darkslategrey;
+    border-color: darkslategrey;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+.manage-buttons {
+    margin-top: 13px;
+}
+.order-heading {
+    margin-top: 20px;
+}
+.update-button {
+    margin-top: 10px;
+}
+
+.receipt-button {
+    background-color: #964B00;  /* change it to your preferred shade of brown */
+    border-color: #964B00; /* also change border color to keep them consistent */
+}

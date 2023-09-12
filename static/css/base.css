@@ -1,0 +1,400 @@
+body {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+    font-family: 'Poppins', sans-serif !important;
+    background-color: whitesmoke !important;
+}
+
+body::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+}
+
+.page {
+    min-height: 57vh;
+
+}
+
+
+
+
+/*
+.navbar {
+    background-color: black;
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    top: 0;
+}
+
+.nav-link {
+
+    position: relative;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    transition: all 0.5s ease;
+    transform: scale(0);
+}
+
+.nav-link.active::before,
+.nav-link:hover::before {
+    transform: scale(1);
+}*/
+
+@media screen and (max-width: 986px) {
+    .navbar{ background-color: #0D50B0; width: 100%;position: absolute !important;z-index: 99;float: right;right: 0;
+}
+    .login-list{
+        padding-left: 0;
+    }
+    .srcbox{
+        margin-bottom: 3px;
+    }
+    .notification{
+        margin-top:60px;
+    }
+    .mobile-mt{
+        margin-top: 45px;
+    }
+}
+
+
+.login-list{
+display: flex;
+list-style: none;
+margin: auto 0 auto auto;
+
+}
+
+/*
+footer start
+ */
+.footer {
+    background-color: black;
+}
+
+.footerheads {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footerlist {
+    list-style: none;
+}
+
+
+.rosybrown{
+    color: rosybrown;
+}
+.footerlinks {
+    text-decoration: none !important;
+    color: #FFFFFF80;
+!important;
+    text-decoration-color: #06003C !important;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footerlinks:hover {
+    color: white;
+}
+
+.footersocialmedialist {
+    /*display: inline;*/
+    list-style: none;
+    justify-content: center;
+    /*margin-left: 25px;*/
+    margin-top: 30px;
+    border-radius: 20px;
+    background-color: white;
+    padding: 0px 6px 3px 6px;
+}
+
+.footersign {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.footertext {
+    font-family: 'Poppins', sans-serif;
+    color: #FFFFFF80;
+}
+
+.upside {
+    margin-top: 10rem;
+}
+
+
+
+.linkler{
+    text-decoration: none !important;
+    color: black !important;
+    text-decoration-color: black !important;
+
+}
+
+.linkler:hover{
+    color: black;
+}
+
+.links {
+    text-decoration: none !important;
+    color: black;
+}
+
+.links:hover {
+    color: black;
+}
+
+.buttons {
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none !important;
+}
+.tellinks {
+    text-decoration: none !important;
+    color: grey;
+}
+
+.tellinks:hover {
+    color: grey;
+}
+
+
+
+
+@media screen and (min-width: 768px ) and (max-width: 986px ) {
+    .ipad {
+        margin-top: 1rem;
+        display: block !important;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 986px) {
+    #reformer-menu {
+        display: none;
+    }
+
+    .ipad {
+        display: block !important;
+    }
+
+    .navbar-collapse {
+        margin-top: 0.3rem;
+        position: fixed;
+        top: 50px;
+        left: 0;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+        width: 75%;
+        height: 100%;
+        background-color: black;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .navbar-collapse.collapsing {
+        left: -75%;
+        transition: height 0s ease;
+    }
+
+    .navbar-collapse.show {
+        left: 0;
+        transition: left 300ms ease-in-out;
+    }
+
+    .navbar-toggler.collapsed ~ .navbar-collapse {
+        transition: left 500ms ease-in-out;
+    }
+
+    .mobmenubtn {
+        color: white !important;
+        text-align: center;
+    }
+
+    .mobmenubtndiv {
+        border-radius: 6px;
+        border: 1px solid white;
+    }
+
+    .footersocialmedialist {
+        /*display: inline;*/
+        /*list-style: none;*/
+        /*justify-content: center;*/
+        /*margin-left: 30px;*/
+        /*border-radius: 20px;*/
+        /*background-color: white;*/
+        /*padding-right: 5px;*/
+        /*padding-inline: 9px;*/
+        /*padding-block: 9px;*/
+        /*/*/
+        display: inline;
+        list-style: none;
+        justify-content: center;
+        margin-left: 25px;
+        margin-top: 30px;
+        border-radius: 20px;
+        background-color: white;
+        padding: 0px 8px 3px 9px;
+    }
+
+    .mobiledownbtn {
+        background-color: grey;
+    }
+
+}
+
+
+.border-bottoms {
+    border-bottom: 1px solid rgba(0, 0, 0, .1) !important;
+}
+
+
+
+
+.links .card {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    border: 1px solid white;
+    border-radius: 18px !important;
+}
+
+
+
+
+
+
+
+.banner-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    padding: 15px;
+}
+
+.banner-content:hover {
+    display: block;
+
+}
+
+.banner-content:hover + .banner-content {
+    display: block;
+    opacity: 0.1;
+}
+
+.card-img-top:hover + .banner-content {
+    display: block;
+}
+
+
+@media (min-width: 1200px){
+    .container {
+    max-width: 1275px;
+}
+}
+
+.carousel-control-prev-icon{
+    background-color: grey;
+}
+
+.carousel-control-next-icon{
+    background-color: grey;
+}
+.carousel-indicators{
+    background-color: grey;
+}
+
+.product-container {
+    margin-top: 20px;
+}
+
+.sorting-form, .filter-form {
+    margin-bottom: 20px;
+}
+
+.sorting-label, .filter-label {
+    margin-right: 10px;
+}
+
+.sorting-button, .filter-button {
+    margin-top: 10px;
+}
+
+.product-row {
+    margin-top: 20px;
+}
+
+.product-col {
+    padding: 15px;
+}
+
+.product-card {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: box-shadow .3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.product-link {
+    color: #333;
+}
+
+.product-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-body {
+    padding: 15px;
+}
+
+.product-title {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.product-name-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.product-description, .product-price, .product-category, .product-stock {
+    margin-bottom: 10px;
+}
+
+.quantity-div {
+    margin-top: 20px;
+}
+
+.quantity-label {
+    margin-right: 10px;
+}
+
+.add-btn {
+    margin-top: 10px;
+}
+
+.message-div {
+    margin-top: 10px;
+    color: #28a745;
+}
+
+.links .card {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    border: 1px solid white;
+    border-radius: 18px !important;
+}
+
+
+
+.ks{
+    height: 47rem;
+
+}

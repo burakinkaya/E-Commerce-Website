@@ -1,0 +1,22 @@
+.btn-update-product {
+    color: white;
+    background-color: darkslategrey;
+    border-color: darkslategrey;
+    margin-top: 0.6cm;
+}
+
+.btn-update-product:hover {
+    background-color: black;
+    border-color: black;
+}
+
+.btn-update-product:active {
+    background-color: white;
+    color: darkslategrey;
+    border-color: white;
+}
+
+.container {
+    margin-top: 0.5cm;
+}
+

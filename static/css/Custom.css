@@ -1,0 +1,63 @@
+{
+  font-family: 'Roboto', sans-serif;
+}
+
+body{
+    /*background-color: #EEF1F4 !important;*/
+
+}
+
+.navbar{
+    /*background-color: #0D50B0;*/
+
+}
+
+
+
+.bubble{
+    /*min-height: calc(100vh - 700px);*/
+    min-height: 60vh;
+}
+
+
+
+
+
+
+
+
+
+
+
+h2{
+    color: darkgoldenrod;
+}
+
+
+.freepage{
+    min-height: 57vh;
+}
+
+.details{
+    -webkit-box-shadow: 1px 1px 8px 1px #bec4cd !important;
+    width: 85%;
+    text-align: center;
+    padding: 8px;
+    border-radius: 15px;
+}
+
+.login-list{
+display: flex;
+list-style: none;
+margin: auto 0 auto auto;
+
+}
+
+.insidedetails{
+    font-weight: normal;
+}
+
+.changepasswordpage{
+    min-height: 57vh;
+}
+

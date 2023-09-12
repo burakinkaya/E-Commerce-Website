@@ -1,0 +1,36 @@
+.container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.address-container {
+  margin-bottom: 20px;
+}
+
+.address-container .address-box {
+  background-color: #fafafa; /* Very light grey background */
+  border: 1px solid #eaeaea; /* Light grey border */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(178, 144, 144, 0.05); /* Subtle box shadow */
+}
+
+.add-address-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.add-address-container .form-field label {
+  color: #343a40;
+}
+
+.add-address-container .form-field {
+  margin-bottom: 10px;
+}
+
+.add-address-container .btn-success {
+  margin-top: 20px;
+}

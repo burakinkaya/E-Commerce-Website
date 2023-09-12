@@ -1,0 +1,25 @@
+.btn-primary {
+    color:white;
+    background-color: darkslategrey;
+    border-color: darkslategrey;
+    margin-top: 0.6cm;
+}
+
+.btn-secondary {
+    color:white;
+    background-color: darkslategrey;
+    border-color: darkslategrey;
+    margin-top: 0.6cm;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+.btn-primary:active, .btn-secondary:active {
+    background-color: white;
+    color: darkslategrey;
+    border-color: darkslategrey;
+}

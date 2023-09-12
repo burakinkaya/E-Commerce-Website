@@ -1,0 +1,21 @@
+.center-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+    color: white;
+}
+.center-screen h1 {
+    font-size: 3em;
+    margin-bottom: 1em;
+}
+.center-screen .btn {
+    font-size: 1.5em;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
