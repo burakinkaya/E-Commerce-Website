@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+
+
+
+{% endblock %}
+
+
+{% block page_tittle %}
+    Campaign Detail
+{% endblock %}
+
+
+{% block content %}
+    {% if messages %}x
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {% for msg in messages %}
+                alert("{{ msg }}");
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+    <div class="container bubble ">
+        <div class="row">
+            <div class="col mobile-mt">
+
+                <div class="card mb-3 mt-4">
+                    <h5 class="card-title text-center mt-3 ml-2 fw-bold display-4">{{ campaign.campaign_name }}</h5>
+                    <img class="card-img-top mt-3" src="{{ campaign.campaign_image.url }}" alt="Card image cap" height="450">
+                    <div class="card-body">
+                        <p class="card-text">{{ campaign.campaign_description }}</p>
+                        <p class="card-text"><small class="text-muted">{{ campaign.campaign_date }}</small></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

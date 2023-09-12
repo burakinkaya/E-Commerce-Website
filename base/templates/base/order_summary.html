@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% endblock %}
+
+
+{% block page_tittle %}
+    Order Summary
+{% endblock %}
+
+
+{% block content %}
+    {% if messages %}x
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+            });
+        </script>
+    {% endif %}
+    <div class="container page ">
+        <div class="row">
+            <div class="col ">
+                <h1 class="mt-3">Order Summary</h1>
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product.product_name }}</td>
+                            <td><img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}"
+                                     height="50"></td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.get_discounted_price }}$</td>
+                            <td>{{ item.get_total }}$</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="4" style="text-align: right;">Total Price:</th>
+                        <th>{{ total_price }}$</th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <h3>Total Items: {{ total_items }}</h3>
+
+                <h2>Shipping Address</h2>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Address Name</th>
+                        <td>{{ address_info.address_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{ address_info.city }}</td>
+                    </tr>
+                    <tr>
+                        <th>Province</th>
+                        <td>{{ address_info.province }}</td>
+                    </tr>
+                    <tr>
+                        <th>Street</th>
+                        <td>{{ address_info.street }}</td>
+                    </tr>
+                    <tr>
+                        <th>ZIP</th>
+                        <td>{{ address_info.zip }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{{ address_info.phone }}</td>
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

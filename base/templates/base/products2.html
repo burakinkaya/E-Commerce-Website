@@ -1,0 +1,60 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block js_files %}
+{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Products
+{% endblock %}
+
+{% block content %}
+<div class="container product-container">
+<form style="margin-top: 0.2cm" method="POST" action="{% url 'products' %}" class="sorting-form">
+    {% csrf_token %}
+    <label style="color:white;" for="sorting" class="sorting-label">Sort by:</label>
+    <select class="form-control sorting-select" id="sorting" name="sorting">
+        <option value="3">Price In Increasing Order</option>
+        <option value="1">Price In Decreasing Order</option>
+        <option value="2">Rating In Decreasing Order</option>
+    </select>
+    <button type="submit" style="margin-top: 0.2cm" class="btn btn-primary sorting-button">Sort</button>
+</form>
+
+<form style="margin-top: 0.5cm" method="POST" action="{% url 'filter' %}" class="filter-form">
+    {% csrf_token %}
+    <label for="category" style="color:white;" class="filter-label">Filter By Category:</label>
+    <select class="form-control filter-select" id="category" name="category">
+        <option value="">All Categories</option>
+        {% for category in category %}
+            <option value="{{ category.category_name }}">{{ category.category_name }}</option>
+        {% endfor %}
+    </select>
+    <button style="margin-top: 0.2cm" type="submit" class="btn btn-primary filter-button" formaction="{% url 'filter' %}">Filter</button>
+</form>
+    <div class="row product-row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4 product-col">
+            <div style="margin-top: 0.5cm" class="card product-card ks">
+                <a href="{% url 'details2' product.product_slug %}" class="product-link">
+                    <img src="{{ product.product_pic.url }}" class="card-img-top product-img" alt="{{ product.product_name }}">
+                </a>
+                <div class="card-body product-body">
+                    <h5 class="card-title product-title">
+                        <a href="{% url 'details2' product.product_slug %}" class="product-name-link">{{ product.product_name }}</a>
+                    </h5>
+                    <p class="card-text product-description">Description: {{ product.product_description }}</p>
+                    <p class="card-text product-price">Price: {{ product.product_price }}$</p>
+                    <p class="card-text product-category">Category: {{ product.product_category }}</p>
+                    <p class="card-text product-stock">Count In Stock: {{ product.product_countInStock }}</p>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

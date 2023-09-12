@@ -1,0 +1,43 @@
+{% extends 'base2.html' %}
+
+{% load static %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block page_tittle %}
+    Manage Product Comments
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage">
+        <a class="btn btn-outline-dark" href="{% url 'details2' product.product_slug %}">&#x2190; Back to Product Page</a>
+
+        <h5>Comments:</h5>
+        {% for comment in comments %}
+            {% if comment.product == product %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">Comment content: {{ comment.content }}</p>
+                        <p class="card-text">Written by: {{ comment.user.username }}</p>
+                        <p class="card-text">Product: {{ comment.product }}</p>
+                        <p class="card-text">Written at: {{ comment.timestamp }}</p>
+                        <form method="POST" action="{% url 'comment_approval_detailed' comment.id %}">
+                            {% csrf_token %}
+                            <label for="is_approved-{{ comment.id }}">Comment Approval:</label>
+                            <input type="checkbox" name="is_approved" id="is_approved-{{ comment.id }}" class="form-control is_approved-checkbox" value="true" {% if comment.is_approved %}checked{% endif %}>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <form method="POST" action="{% url 'delete_comment_detailed' comment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p style="color:white;">No comments for this product yet.</p>
+
+        {% endfor %}
+    </div>
+{% endblock %}

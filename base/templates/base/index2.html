@@ -1,0 +1,32 @@
+{% extends 'base2.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/admin_page.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Admin Home
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow rounded-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h1 class="fw-bold mb-3">Admin Home</h1>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="/products2" class="btn btn-primary btn-lg mb-3 w-100">Go to Products</a>
+                            <a href="/account/admin_page" class="btn btn-primary btn-lg mb-3 w-100">Go to Administration</a>
+                            <a href="/account/profile" class="btn btn-primary btn-lg mb-3 w-100">Go to Profile Settings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

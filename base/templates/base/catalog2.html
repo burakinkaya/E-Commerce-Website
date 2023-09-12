@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/slick/slick.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/slick/slick-theme.min.css' %}"/>
+
+{% endblock %}
+
+
+{% block page_tittle %}
+    {{ q }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container freepage page">
+        <div class="row">
+            <div class="col mobile-mt">
+
+                <h1  class="mt-3 fw-bold display-4">Searched by name:</h1>
+                <hr>
+                {% if product %}
+                    {% for x in product %}
+                    <a class="linkler" href="/details2/{{ x.product_slug }}" >
+                        <div class="card mb-3 mt-3" >
+                            <div class="card-body " >
+                                <div class="row no-gutters">
+                                    <div class="col-md-3">
+                                        <img src="{{ x.product_pic.url }}" class="card-img" alt="..." height="200">
+                                    </div>
+                                    <div class="col-md-9">
+
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h5 class="card-title"> <h1>{{ x.product_name }}</h1></h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h2 class="card-title"> <h1>{{ x.product_price }}$</h1></h2>
+                                                </div>
+                                                <div class="col"><h2 class="card-title"> <h1>{{ x.product_rating }}/10⭐</h1></h2></div>
+                                            </div>
+                                            <hr>
+                                            <p class="card-text">{{ x.product_description|truncatechars:150 }} </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+                {% else %}
+                    <p class="rosybrown text-center">There is no item name as "{{ q }}".</p>
+                {% endif %}
+
+                <hr>
+                <h1  class="mt-3  fw-bold display-4">Searched by description:</h1>
+                <hr>
+                {% if product2 %}
+
+                    {% for x in product2 %}
+                    <a class="linkler" href="/details2/{{ x.product_slug }}" >
+                        <div class="card mb-3 mt-3" >
+                            <div class="card-body " >
+                                <div class="row no-gutters">
+                                    <div class="col-md-3">
+                                        <img src="{{ x.product_pic.url }}" class="card-img" alt="..." height="200">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h5 class="card-title"> <h1>{{ x.product_name }}</h1></h5>
+                                                </div>
+                                                <div class="col">
+                                                    <h2 class="card-title"> <h1>{{ x.product_price }}$</h1></h2>
+                                                </div>
+                                                <div class="col"><h2 class="card-title"> <h1>{{ x.product_rating }}/10⭐</h1></h2></div>
+                                            </div>
+                                            <hr>
+                                            <p class="card-text">{{ x.product_description|truncatechars:150 }} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+                {% else %}
+                    <p class="rosybrown text-center">There is no description as "{{ q }}".</p>
+                {% endif %}
+                <hr>
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

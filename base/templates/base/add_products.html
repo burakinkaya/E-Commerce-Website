@@ -1,0 +1,116 @@
+{% extends 'base_admin.html' %}
+
+{% load static widget_tweaks %}
+
+{% block css_files %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_tittle %}
+    Add Products
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage">
+    <a class="btn btn-outline-dark" href="/account/admin_page" style="margin-top: 0.5cm;">&#x2190; Back to Admin Panel</a>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+        <div class="row justify-content-center py-5">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow rounded-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h1 class="fw-bold mb-3">Add Product</h1>
+                            <p class="text-muted mb-0">Enter product details below</p>
+                        </div>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form.product_name.label_tag }} {{ form.product_name|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_slug.label_tag }} {{ form.product_slug|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_category.label_tag }} {{ form.product_category|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_brand.label_tag }} {{ form.product_brand|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_description.label_tag }} {{ form.product_description|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_rating.label_tag }} {{ form.product_rating|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_numReviews.label_tag }} {{ form.product_numReviews|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_price.label_tag }} {{ form.product_price|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_countInStock.label_tag }} {{ form.product_countInStock|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.product_createdAt.label_tag }} {{ form.product_createdAt|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.digital.label_tag }} {{ form.digital|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_product_pic">Product Images:</label> 
+                                <button type="button" class="btn btn-success btn-sm" id="add_more">Add more images</button>
+                                <div id="product_pic_div">
+                                    <input type="file" name="product_pic" id="id_product_pic" class="form-control" required multiple>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.cost.label_tag }} {{ form.cost|add_class:"form-control" }}
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Add Product</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("id_product_name").addEventListener("input", function(e) {
+            const productName = e.target.value;
+            const slugified = productName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+            document.getElementById("id_product_slug").value = slugified;
+        });
+
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const imageInputs = document.querySelectorAll("input[type='file']");
+            let imageCount = 0;
+            imageInputs.forEach(input => {
+                if (input.files.length > 0) imageCount += 1;
+            });
+            if (imageCount < 3) {
+                e.preventDefault();
+                alert("Please upload at least 3 images.");
+            }
+        });
+
+        document.querySelector("#add_more").addEventListener("click", function(e) {
+            e.preventDefault();
+            const newImageInput = document.createElement('input');
+            newImageInput.setAttribute('type', 'file');
+            newImageInput.setAttribute('name', 'product_pic');
+            newImageInput.setAttribute('class', 'form-control');
+            document.querySelector("#product_pic_div").appendChild(newImageInput);
+        });
+    </script>
+
+{% endblock %}

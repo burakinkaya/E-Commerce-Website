@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Summary</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .processing {
+            color: rgb(255, 166, 0);
+        }
+        .in-transit {
+            color: rgb(21, 83, 199);
+        }
+        .delivered {
+            color: rgb(12, 226, 65);
+        }
+        .is_refunded {
+            color: rgb(212, 16, 16);
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Summary - Order ID: {{ order_id }}</h1>
+
+    <h2>Order's Situation: 
+        <span class="
+            {% if order_status == 'Processing' %}
+                processing
+            {% elif order_status == 'In Transit' %}
+                in-transit
+            {% elif order_status == 'Refunded' %}
+                is_refunded
+            {% elif order_status == 'Delivered' %}
+                delivered
+            {% endif %}">
+            {{ order_status }}
+        </span>
+    </h2>
+
+    <h2>Order Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_items %}
+                <tr>
+                    <td>{{ item.product.product_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.product_price }}$</td>
+                    <td>{{ item.get_total }}$</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" style="text-align: right;">Total Price:</th>
+                <th>{{ total_price }}$</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h3>Total Items: {{ total_items }}</h3>
+
+    <h2>Shipping Address</h2>
+    <table>
+        <tr>
+            <th>Address Name</th>
+            <td>{{ address_info.address_name }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ address_info.city }}</td>
+        </tr>
+        <tr>
+            <th>Province</th>
+            <td>{{ address_info.province }}</td>
+        </tr>
+        <tr>
+            <th>Street</th>
+            <td>{{ address_info.street }}</td>
+        </tr>
+        <tr>
+            <th>ZIP</th>
+            <td>{{ address_info.zip }}</td>
+        </tr>
+        <tr>
+            <th>Phone</th>
+            <td>{{ address_info.phone }}</td>
+        </tr>
+    </table>
+</body>
+</html>

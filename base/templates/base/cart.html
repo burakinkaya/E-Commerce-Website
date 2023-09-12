@@ -1,0 +1,113 @@
+<!-- products.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block js_files %}
+{% endblock %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+{% block css %}
+    <style>
+        .product-card {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-card .card {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .product-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        @media (min-width: 576px) {
+            .product-card .card {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .product-card .card {
+                flex: 0 0 33.33%;
+                max-width: 33.33%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .product-card .card {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        .cart-totals {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+
+
+{% endblock %}
+
+{% block page_title %}
+    Cart
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="product-card mt-5">
+
+            {% for item in items %}
+                <div class="card">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.product.product_name }}</h5>
+                                <p class="card-text">Price: {{ item.product.get_discounted_price }}$</p>
+                                <p class="card-text">Total Price: {{ item.get_total }}$</p>
+                                <p class="card-text">Count In Stock: {{ item.product.product_countInStock }}</p>
+                                <p class="card-text">Quantity: {{ item.quantity }}</p>
+                                <div>
+                                    <button data-product="{{ item.product.product_slug }}" data-quantity="0"
+                                            data-user="{{ user }}" data-action="remove" type="submit"
+                                            class="btn btn-outline-secondary add-btn update-cart"
+                                            onclick="event.preventDefault(); location.reload();">Delete
+                                    </button>
+
+                                    <button data-product="{{ item.product.product_slug }}" data-quantity="0"
+                                            data-user="{{ user }}" data-action="removeAll" type="submit"
+                                            class="btn btn-outline-secondary add-btn update-cart"
+                                            onclick="event.preventDefault(); location.reload();">Delete All
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'details' item.product.product_slug %}">
+                                <img src="{{ item.product.product_pic.url }}" class="card-img-top "
+                                     alt="{{ item.product.product_name }} ">
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-totals">
+            <h3>Proceed the Checkout</h3>
+            <h5>Total Items: {{ order.get_cart_items }}</h5>
+            <h5>Total Price: {{ order.get_cart_total }}$</h5>
+            <a class="btn btn-success" href="{% url 'checkout' %}">Checkout </a>
+        </div>
+    </div>
+{% endblock %}

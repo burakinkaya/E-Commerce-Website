@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block page_tittle %}
+    ss
+{% endblock %}
+
+{% block css_files %}
+
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container">
+        <a class="btn btn-outline-dark mt-3 mb-3" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+        <hr>
+        <h1 class="ml-3">Checkout </h1>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="box-element" id="form-wrapper">
+                    <form id="form" method="POST" action="{% url 'checkout_completed' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-6">
+                                <h2>Your Addresses:</h2>
+                                {% for address in addresses %}
+                                    <div>
+                                        <p><strong>Address:</strong> {{ address.addresname }}</p>
+                                        <p><strong>City:</strong> {{ address.city }}</p>
+                                        <p><strong>Province:</strong> {{ address.province }}</p>
+                                        <p><strong>Street:</strong> {{ address.street }}</p>
+                                        <p><strong>Zip:</strong> {{ address.zip }}</p>
+                                        <p><strong>Phone:</strong> {{ address.phone }}</p>
+                                        <input type="radio" id="address{{ address.id }}" name="selected_address"
+                                               value="{{ address.id }}">
+                                        <label for="address{{ address.id }}">Select this address</label><br>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+
+                                {% for address in addresses %}
+                                    <div>
+                                        <p><strong>Address:</strong> {{ address.addresname }}</p>
+                                        <p><strong>City:</strong> {{ address.city }}</p>
+                                        <p><strong>Province:</strong> {{ address.province }}</p>
+                                        <p><strong>Street:</strong> {{ address.street }}</p>
+                                        <p><strong>Zip:</strong> {{ address.zip }}</p>
+                                        <p><strong>Phone:</strong> {{ address.phone }}</p>
+                                        <input type="radio" id="address{{ address.id }}" name="selected_address"
+                                               value="{{ address.id }}">
+                                        <label for="address{{ address.id }}">Select this address</label><br>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+
+                                <h2 class="mt-3 fw-bold">Add a new address: </h2>
+                                {{ form.as_p }}<!-- this line automatically generates the form fields -->
+                            </div>
+                            <div class="col-6">
+                                <h2>Your Cards:</h2>
+                                {% for card in cards %}
+                                    <div>
+                                        <p><strong>Name on the Credit Card:</strong> {{ card.cardName }}</p>
+                                        <p><strong>Card Number:</strong> **** ****
+                                            **** {{ card.cardNumber|slice:"-4:" }}</p>
+                                        <p><strong>Card Nick Name:</strong> {{ card.cardNick }}</p>
+                                        <input type="radio" id="card{{ card.id }}" name="selected_cards"
+                                               value="{{ card.id }}">
+                                        <label for="card{{ card.id }}">Select this card</label><br>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+                                <h2 class="mt-3 fw-bold">Add a new Card: </h2>
+                                {{ form2.as_p }}<!-- this line automatically generates the form fields -->
+                            </div>
+                        </div>
+
+
+                        <div class="form-field">
+                            <input class="btn btn-success btn-block" type="submit" value="Continue">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="box-element">
+
+                    <h1>Order Summary</h1>
+                    <hr>
+
+                    <div class="card">
+                        <div class="row">
+                            <div class="col">
+                                {% for item in items %}
+                                    <hr>
+                                    <p><strong>Name:</strong> {{ item.product.product_name }}</p>
+                                    <p><strong>Price:</strong> {{ item.product.get_discounted_price }}$</p>
+                                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                    <p><strong>Total Price:</strong> {{ item.get_total }}$</p>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                            <div class="col">
+                                <hr>
+                                <h3>Total Items: {{ order.get_cart_items }}</h3>
+                                <h3>Total Price: {{ order.get_cart_total }}$</h3>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        var selectedRadio;
+        var addressRadios = document.querySelectorAll('input[name="selected_address"]');
+        var cardRadios = document.querySelectorAll('input[name="selected_cards"]');
+        var addForm = document.querySelector('form#form');
+        var textInputs = addForm.querySelectorAll('input[type="text"]');
+
+        updateContinueButton()
+
+        addressRadios.forEach((elem) => {
+            elem.addEventListener("click", function () {
+                var isChecked = [...addressRadios].some(radio => radio.checked);
+
+                if (selectedRadio === this) {
+                    this.checked = false;
+                    selectedRadio = null;
+                    isChecked = false;
+                } else {
+                    selectedRadio = this;
+                }
+
+
+                updateContinueButton();
+            });
+        });
+
+        cardRadios.forEach((elem) => {
+            elem.addEventListener("click", function () {
+                var isChecked = [...cardRadios].some(radio => radio.checked);
+                if (selectedRadio === this) {
+                    this.checked = false;
+                    selectedRadio = null;
+                    isChecked = false;
+                } else {
+                    selectedRadio = this;
+                }
+                updateContinueButton();
+            });
+        });
+
+        textInputs.forEach((input) => {
+            input.addEventListener("input", function () {
+                updateContinueButton();
+            });
+        });
+
+        function updateContinueButton() {
+            var isChecked = [...addressRadios].some(radio => radio.checked);
+            var isChecked2 = [...cardRadios].some(radio => radio.checked);
+            var isInputEmpty = [...textInputs].some(input => input.value.trim() === ""); // Check for empty text inputs
+
+
+            var input1 = addForm.querySelector('input[name="cardName"]');
+            //var isInput1Empty = [...input1].some(input => input.value.trim() === "");
+            var input2 = addForm.querySelector('input[name="cardNumber"]');
+            //var isInput2Empty = [...input2].some(input => input.value.trim() === "");
+            var input3 = addForm.querySelector('input[name="expiration"]');
+            //var isInput3Empty = [...input3].some(input => input.value.trim() === "");
+            var input4 = addForm.querySelector('input[name="cvc"]');
+            //var isInput4Empty = [...input4].some(input => input.value.trim() === "");
+            var input5 = addForm.querySelector('input[name="cardNick"]');
+            //var isInput5Empty = [...input5].some(input => input.value.trim() === "");
+
+            var input6 = addForm.querySelector('input[name="addresname"]');
+            //var isInput6Empty = [...input6].some(input => input.value.trim() === "");
+            var input7 = addForm.querySelector('input[name="city"]');
+            //var isInput7Empty = [...input7].some(input => input.value.trim() === "");
+            var input8 = addForm.querySelector('input[name="province"]');
+            //var isInput8Empty = [...input8].some(input => input.value.trim() === "");
+            var input9 = addForm.querySelector('input[name="street"]');
+            //var isInput9Empty = [...input9].some(input => input.value.trim() === "");
+            var input10 = addForm.querySelector('input[name="zip"]');
+            //var isInput10Empty = [...input10].some(input => input.value.trim() === "");
+            var input11 = addForm.querySelector('input[name="phone"]');
+            //var isInput11Empty = [...input11].some(input => input.value.trim() === "");
+
+            if (isChecked2) {
+                input1.disabled = true;
+                input2.disabled = true;
+                input3.disabled = true;
+                input4.disabled = true;
+                input5.disabled = true;
+            } else {
+                input1.disabled = false;
+                input2.disabled = false;
+                input3.disabled = false;
+                input4.disabled = false;
+                input5.disabled = false;
+            }
+
+            if (isChecked) {
+                input6.disabled = true;
+                input7.disabled = true;
+                input8.disabled = true;
+                input9.disabled = true;
+                input10.disabled = true;
+                input11.disabled = true;
+            } else {
+                input6.disabled = false;
+                input7.disabled = false;
+                input8.disabled = false;
+                input9.disabled = false;
+                input10.disabled = false;
+                input11.disabled = false;
+            }
+
+
+            var isFull = false;
+            var iFull2 = false;
+
+            if (input6.value.trim() === "" || input7.value.trim() === "" || input8.value.trim() === ""
+                || input9.value.trim() === "" || input10.value.trim() === "" || input11.value.trim() === "") {
+                isFull = false;
+            } else {
+                isFull = true;
+            }
+            if (input1.value.trim() === "" || input2.value.trim() === "" || input3.value.trim() === ""
+                || input4.value.trim() === "" || input5.value.trim() === "") {
+                isFull2 = false;
+            } else {
+                isFull2 = true;
+            }
+
+
+            var continueButton = addForm.querySelector('input[type="submit"]');
+            //continueButton.disabled = ((!isChecked && !isChecked2) && (!isFull &&  !isFull2)) || (!isChecked && isChecked2 && !isFull) || (!isChecked2 && isChecked && !isFull2) ;
+
+            if ((!isChecked && !isChecked2) && isInputEmpty) {
+                continueButton.disabled = true;
+            } else if (!isChecked && isChecked2 && !isFull) {
+                continueButton.disabled = true;
+            } else if (!isChecked2 && isChecked && !isFull2) {
+                continueButton.disabled = true;
+            } else {
+                continueButton.disabled = false;
+            }
+        }
+    </script>
+
+
+{% endblock content %}
