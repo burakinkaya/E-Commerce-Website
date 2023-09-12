@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Status Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .email-header {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .email-body {
+            padding: 20px;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #dddddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h2>Order Status Update</h2>
+        </div>
+        <div class="email-body">
+            <p>Hello {{ user_name }},</p>
+            <p>{{ status_message }}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Discount</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ product.product_name }}</td>
+                    <td>-{{ discount }}$</td>
+                </tr>
+                </tbody>
+            </table>
+            <p>Thank you for shopping with us🙏</p>
+        </div>
+    </div>
+</body>
+</html>

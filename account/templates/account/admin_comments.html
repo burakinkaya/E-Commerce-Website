@@ -1,0 +1,46 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/admin_comments.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Admin Comments
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage mb-5">
+        <div class="ss">
+            <a class="btn btn-outline-secondary mt-3" href="/account/admin_page">&#x2190; Back to Admin Panel</a>
+
+            <h5 class="mt-3"><strong>Comments:</strong></h5>
+            {% for comment in comments %}
+                <div class="card mb-5 ">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Comment content:</strong> {{ comment.content }}</p>
+                        <p class="card-text"><strong>Written by:</strong> {{ comment.user.username }}</p>
+                        <p class="card-text"><strong>Product:</strong> {{ comment.product }}</p>
+                        <p class="card-text"><strong>Written at:</strong> {{ comment.timestamp }}</p>
+                        <form method="POST" action="{% url 'comment_approval' comment.id %}">
+                            {% csrf_token %}
+                            <label for="is_approved-{{ comment.id }}">Comment Approval:</label>
+                            <input type="checkbox" name="is_approved" id="is_approved-{{ comment.id }}"
+                                   class="form-control is_approved-checkbox" value="true"
+                                   {% if comment.is_approved %}checked{% endif %}>
+                            <button type="submit" class="btn btn-primary admin-button">Submit</button>
+                        </form>
+                        <form style="margin-top: 0.2cm;" method="POST" action="{% url 'delete_comment' comment.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger admin-button">Delete</button>
+                        </form>
+
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color:white;">No comments yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

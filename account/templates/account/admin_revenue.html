@@ -1,0 +1,351 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_orders.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block page_tittle %}
+    Revenue
+{% endblock %}
+
+{% block content %}
+    <div class="container page">
+        <a class="btn btn-outline-dark " href="/account/admin_page" style="margin-top: 0.5cm;">&#x2190; Back to Admin Panel</a>
+
+        <div class="manage-buttons mb-3" style="color: white">
+        <a onclick="showOrders('daily-revenue')" class="btn btn-primary">Daily Revenue</a>
+        <a onclick="showOrders('monthly-revenue')" class="btn btn-secondary">Monthly Revenue</a>
+        <a onclick="showOrders('yearly-revenue')" class="btn btn-primary">Yearly Revenue</a>
+        </div>
+
+        <div id="daily-revenue">
+            <p class="card-text"><strong>Daily Income:</strong> +{{ income_daily }}</p>
+            <p class="card-text"><strong>Daily Refunds:</strong> -{{ refund_daily }}</p>
+            <p class="card-text"><strong>Daily Products Cost :</strong> -{{ product_cost_daily }}</p>
+            <p class="card-text"><strong>Daily Subtotal:</strong> ={{ subtotal_daily }}</p>
+            <p class="card-text"><strong>Total Daily Giro:</strong> ±{{ giro_daily }}</p>
+            <h5 class="order-heading" id="daily-revenue" >Daily Orders In Revenue:</h5>
+            {% for ord in daily_orders %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                            <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                            <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                            <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                            <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+
+        <div id="monthly-revenue" style="display: none;">
+            <p class="card-text"><strong>Monthly Income:</strong> +{{ income_monthly }}</p>
+            <p class="card-text"><strong>Monthly Refunds:</strong> -{{ refund_monthly }}</p>
+            <p class="card-text"><strong>Monthly Products Cost :</strong> -{{ product_cost_monthly }}</p>
+            <p class="card-text"><strong>Monthly Subtotal:</strong> ={{ subtotal_monthly }}</p>
+            <p class="card-text"><strong>Monthly Giro:</strong> ±{{ giro_monthly }}</p>
+            <h5 class="order-heading" id="monthly-revenue" >Monthly Orders In Revenue:</h5>
+            {% for ord in monthly_orders %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                            <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                            <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                            <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                            <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+
+        <div id="yearly-revenue" style="display: none;">
+            <p class="card-text"><strong>Yearly Income:</strong> +{{ income_yearly }}</p>
+            <p class="card-text"><strong>Yearly Refunds:</strong> -{{ refund_yearly }}</p>
+            <p class="card-text"><strong>Yearly Products Cost :</strong> -{{ product_cost_yearly }}</p>
+            <p class="card-text"><strong>Yearly Subtotal:</strong> ={{ subtotal_yearly }}</p>
+            <p class="card-text"><strong>Yearly Giro:</strong> ±{{ giro_yearly }}</p>
+            <h5  class="order-heading" id="yearly-revenue" >Yearly Orders In Revenue:</h5>
+            {% for ord in yearly_orders %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                            <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                            <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                            <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                            <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+        <canvas id="myDailyPieChart"></canvas>
+        <canvas id="myDailyLineChart"></canvas>
+        <canvas id="myMonthlyPieChart" style="display: none;"></canvas>
+        <canvas id="myMonthlyLineChart" style="display: none;"></canvas>
+        <canvas id="myYearlyPieChart" style="display: none;"></canvas>
+        <canvas id="myYearlyLineChart" style="display: none;"></canvas>
+        <canvas id="myDailyBarChart"></canvas>
+        <canvas id="myMonthlyBarChart" style="display: none;"></canvas>
+        <canvas id="myYearlyBarChart" style="display: none;"></canvas>
+    </div>
+
+<script>
+    let ctxDailyPie = document.getElementById('myDailyPieChart').getContext('2d');
+    let ctxMonthlyPie = document.getElementById('myMonthlyPieChart').getContext('2d');
+    let ctxYearlyPie = document.getElementById('myYearlyPieChart').getContext('2d');
+    let ctxDailyLine = document.getElementById('myDailyLineChart').getContext('2d');
+    let ctxMonthlyLine = document.getElementById('myMonthlyLineChart').getContext('2d')
+    let ctxYearlyLine = document.getElementById('myYearlyLineChart').getContext('2d')
+    let ctxDailyBar = document.getElementById('myDailyBarChart').getContext('2d');
+    let ctxMonthlyBar = document.getElementById('myMonthlyBarChart').getContext('2d');
+    let ctxYearlyBar = document.getElementById('myYearlyBarChart').getContext('2d');
+    let myDailyPieChart = new Chart(ctxDailyPie, {
+        type: 'pie',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_daily }}, {{ refund_daily }}, {{ subtotal_daily }}, {{ giro_daily }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+    let myMonthlyPieChart = new Chart(ctxMonthlyPie, {
+        type: 'pie',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_monthly }}, {{ refund_monthly }}, {{ subtotal_monthly }}, {{ giro_monthly }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+    let myYearlyPieChart = new Chart(ctxYearlyPie, {
+        type: 'pie',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_yearly }}, {{ refund_yearly }}, {{ subtotal_yearly }}, {{ giro_yearly }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+    let myDailyLineChart = new Chart(ctxDailyLine, {
+        type: 'line',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_daily }}, {{ refund_daily }}, {{ subtotal_daily }}, {{ giro_daily }}],
+                borderColor: 'rgba(75, 192, 192, 1)',  // Green
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let myMonthlyLineChart = new Chart(ctxMonthlyLine, {
+        type: 'line',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_monthly }}, {{ refund_monthly }}, {{ subtotal_monthly }}, {{ giro_monthly }}],
+                borderColor: 'rgba(75, 192, 192, 1)',  // Green
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let myYearlyLineChart = new Chart(ctxYearlyLine, {
+        type: 'line',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_yearly }}, {{ refund_yearly }}, {{ subtotal_yearly }}, {{ giro_yearly }}],
+                borderColor: 'rgba(75, 192, 192, 1)',  // Green
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let myDailyBarChart = new Chart(ctxDailyBar, {
+        type: 'bar',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_daily }}, {{ refund_daily }}, {{ subtotal_daily }}, {{ giro_daily }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let myMonthlyBarChart = new Chart(ctxMonthlyBar, {
+        type: 'bar',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_monthly }}, {{ refund_monthly }}, {{ subtotal_monthly }}, {{ giro_monthly }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    let myYearlyBarChart = new Chart(ctxYearlyBar, {
+        type: 'bar',
+        data: {
+            labels: ['Income', 'Refunds', 'Subtotal', 'Giro'],
+            datasets: [{
+                data: [{{ income_daily }}, {{ refund_yearly }}, {{ subtotal_yearly }}, {{ giro_yearly }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',  // Red
+                    'rgba(54, 162, 235, 0.2)',  // Blue
+                    'rgba(255, 206, 86, 0.2)',  // Yellow
+                    'rgba(75, 192, 192, 0.2)'  // Green
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',  // Red
+                    'rgba(54, 162, 235, 1)',  // Blue
+                    'rgba(255, 206, 86, 1)',  // Yellow
+                    'rgba(75, 192, 192, 1)'  // Green
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    function showOrders(id) {
+        const ids = ['daily-revenue', 'monthly-revenue', 'yearly-revenue'];
+        const chartIds = {
+            pie: ['myDailyPieChart', 'myMonthlyPieChart', 'myYearlyPieChart'],
+            line: ['myDailyLineChart', 'myMonthlyLineChart', 'myYearlyLineChart'],
+            bar: ['myDailyBarChart', 'myMonthlyBarChart', 'myYearlyBarChart']
+        };
+        for (let i = 0; i < ids.length; i++) {
+            const element = document.getElementById(ids[i]);
+            const chartElementPie = document.getElementById(chartIds.pie[i]);
+            const chartElementLine = document.getElementById(chartIds.line[i]);
+            const chartElementBar = document.getElementById(chartIds.bar[i]);
+            if (ids[i] === id) {
+                element.style.display = 'block';
+                chartElementPie.style.display = 'block';
+                chartElementLine.style.display = 'block';
+                chartElementBar.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+                chartElementPie.style.display = 'none';
+                chartElementLine.style.display = 'none';
+                chartElementBar.style.display = 'none';
+            }
+        }
+    }
+
+    showOrders('daily-revenue');
+
+</script>
+
+
+
+
+{% endblock %}

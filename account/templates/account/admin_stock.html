@@ -1,0 +1,40 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/admin_stock.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Manage Stock
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage">
+        <a class="btn btn-outline-secondary" href="/account/admin_page">&#x2190; Back to Admin Panel</a>
+
+        <h5 class="mt-3">Products:</h5>
+        {% for product in products %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text"><strong>Product Name:</strong> {{ product.product_name }}</p>
+                <p class="card-text"><strong>Product Price:</strong> {{ product.product_price }}</p>
+                <p class="card-text"><strong>Product In Stock:</strong> {{ product.product_countInStock }}</p>
+                <p class="card-text"><strong>Product Cost:</strong> {{ product.cost }}</p>
+                <form method="POST" action="{% url 'update_product' product.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="new_stock-{{ product.id }}"><strong>New Stock:</strong></label>
+                        <input type="number" min="0" class="form-control" id="new_stock-{{ product.id }}" name="new_stock" placeholder="Enter new stock">
+                    </div>
+                    <button type="submit" class="btn btn-secondary" style="margin-top: -10px">Update Product</button>
+                </form>
+
+            </div>
+        </div>
+        {% empty %}
+            <p>No Products yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

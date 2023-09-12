@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block page_tittle %}
+    Profile
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage">
+        <div class="row">
+            <div class="col mobile-mt">
+                <h1  class="mt-3  fw-bold display-4">Profile</h1>
+                <hr>
+                <p  class="font-weight-bold mt-5">Customer ID: <span class="insidedetails">{{ user.id }}</span></p>
+                <p  class="font-weight-bold mt-5">Username: <span class="insidedetails">{{ user.username }}</span></p>
+                <p  class="font-weight-bold mt-5">First Name: <span class="insidedetails">{{ user.first_name }}</span></p>
+                <p  class="font-weight-bold mt-5">Last Name: <span class="insidedetails">{{ user.last_name }}</span></p>
+                <p  class="font-weight-bold mt-5">Email: <span class="insidedetails">{{ user.email }}</span></p>
+                <p class="font-weight-bold mt-5">Tax ID: <span class="insidedetails">30{{ user.id|stringformat:"04d" }}</span></p>
+
+                <p  class="font-weight-bold mt-5">Birth Date: <span class="insidedetails">{{ user.birthdate }}</span></p>
+                <p  class="font-weight-bold mt-5">Gender: <span class="insidedetails">{{ user.gender }}</span></p>
+                <a href="{% url 'changepassword' %}"><button type="button" class="btn btn-warning font-weight-bold mt-4">Change Password</button></a>
+                <a href="{% url 'address' %}"><button type="button" class="btn btn-secondary font-weight-bold mt-4">My Addresses</button></a>
+                <a href="{% url 'card' %}"><button type="button" class="btn btn-secondary font-weight-bold mt-4">My Credit Cards</button></a>
+                <a href="{% url 'orders' %}"><button type="button" class="btn btn-secondary font-weight-bold mt-4">My Orders</button></a>
+                <a href="{% url 'wishlist' %}"><button type="button" class="btn btn-secondary font-weight-bold mt-4">My Favourites</button></a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}

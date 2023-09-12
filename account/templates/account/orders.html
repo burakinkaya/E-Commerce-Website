@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block page_tittle %}
+    My Orders
+{% endblock %}
+
+{% block content %}
+<div class="container freepage mt-3 mb-3">
+    <a class="btn btn-outline-dark" href="{% url 'profile' %}">&#x2190; Back to Profile</a>
+    <h5 class="mt-3">My Orders:</h5>
+    {% for order in orders %}
+        {% if order.get_cart_total > 0 and order.customer == request.user  %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p class="card-text"><strong>Customer Username:</strong> {{ order.customer.username }}</p>
+                    <p class="card-text"><strong>Order ID:</strong> {{ order.id }}</p>
+                    <p class="card-text"><strong>Order Date:</strong> {{ order.date_ordered }}</p>
+                    <p class="card-text"><strong>Shipping Address:</strong> {{ order.orderaddress.street }} {{ order.orderaddress.province }} {{ order.orderaddress.city }} {{ order.orderaddress.zip }} </p>
+                    <p class="card-text"><strong>Phone:</strong> {{ order.orderaddress.phone }}</p>
+                    <p class="card-text"><strong>Items Ordered:</strong> {{ order.get_cart_names }}</p>
+                    <p class="card-text"><strong>Order Status:</strong> {{ order.get_status2 }}</p>
+                    {% if not order.refund_requested %}
+                        <form id="refundForm{{order.id}}" method="POST" action="{% url 'refund_request' order.id %}">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-danger refund-button" data-order-id="{{order.id}}" data-order-date="{{order.date_ordered|date:'c'}}">Refund</button>
+                        </form>
+                    {% elif order.is_refunded %}
+                        <p class="card-text" style="color:red;"><strong>Refunded!</strong></p>
+                    {% else %}
+                        <p class="card-text" style="color:blue;"><strong>Refund Requested!</strong></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    document.querySelector('.container').addEventListener('click', function (e) {
+        if (e.target.matches('.refund-button')) {
+            e.preventDefault();
+            const orderId = e.target.getAttribute('data-order-id');
+            const orderDate = new Date(e.target.getAttribute('data-order-date'));
+
+            // Get the difference in days
+            const diffTime = Math.abs(new Date() - orderDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 30) {
+                Swal.fire({
+                    title: 'Error',
+                    text: "Refund period ended.",
+                    icon: 'error',
+                })
+            } else {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Please examine our terms before applying for refund.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.querySelector("#refundForm" + orderId).submit();
+                    }
+                })
+            }
+        }
+    });
+</script>
+
+{% endblock %}

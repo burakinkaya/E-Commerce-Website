@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}
+    Favourite Products
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+{% block css %}
+    <style>
+        .product-card {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-card .card {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .product-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        @media (min-width: 576px) {
+            .product-card .card {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .product-card .card {
+                flex: 0 0 33.33%;
+                max-width: 33.33%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .product-card .card {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        .cart-totals {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="product-card mt-5">
+            <a class="btn btn-outline-secondary mt-3 mb-3" href="/account/profile" >&#x2190; Back to Profile</a>
+            {% for product in products %}
+                <div class="card">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.product_name }}</h5>
+                                <p class="card-text mt-md-3 mt-2 "><strong>Price:</strong> {{ product.product_price }}$</p>
+                                <p class="card-text mt-md-3 mt-2 "><strong>Rate:</strong> {{ product.product_rating }}/10⭐</p>
+                                <p class="card-text mt-md-3 mt-2 "><strong>Category:</strong> {{ product.product_category }}</p>
+                                <p class="card-text mt-md-3 mt-2 "><strong>Count in stock:</strong> {{ product.product_countInStock }}</p>
+
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'details' product.product_slug %}">
+                                <img src="{{ product.product_pic.url }}" class="card-img-top "
+                                     alt="{{ item.product.product_name }} ">
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+{% endblock %}

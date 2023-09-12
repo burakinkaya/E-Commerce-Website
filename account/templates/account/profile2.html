@@ -1,0 +1,30 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/admin_page.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Profile
+{% endblock %}
+
+{% block content %}
+    <div class="container freepage">
+        <div class="row">
+            <div class="col mobile-mt">
+                <h1  class="mt-3  fw-bold display-4">Profile</h1>
+                <hr>
+                <p  class="font-weight-bold mt-5">Username: <span class="insidedetails">{{ user.username }}</span></p>
+                <p  class="font-weight-bold mt-5">First Name: <span class="insidedetails">{{ user.first_name }}</span></p>
+                <p  class="font-weight-bold mt-5">Last Name: <span class="insidedetails">{{ user.last_name }}</span></p>
+                <p  class="font-weight-bold mt-5">Email: <span class="insidedetails">{{ user.email }}</span></p>
+                <p  class="font-weight-bold mt-5">Birth Date: <span class="insidedetails">{{ user.birthdate }}</span></p>
+                <p  class="font-weight-bold mt-5">Gender: <span class="insidedetails">{{ user.gender }}</span></p>
+                <a href="{% url 'changepassword' %}"><button type="button" class="btn btn-warning font-weight-bold mt-4">Change Password</button></a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}

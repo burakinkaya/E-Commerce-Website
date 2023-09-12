@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% endblock %}
+
+
+{% block page_tittle %}
+    Home
+{% endblock %}
+
+
+{% block content %}
+    {% if messages %}x
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+            });
+        </script>
+    {% endif %}
+    <div class="container page">
+        <div class="row">
+            <div class="col mobile-mt">
+                <h1 class="mt-3 fw-bold display-4">Admin Login</h1>
+                <hr>
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" name="username" id="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+                    <input type="submit" value="Login" class="btn btn-primary">
+                </form>
+                <hr>
+                <div class="mb-3">
+                    <a class="btn btn-secondary" href="/account/login">Are you an user?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

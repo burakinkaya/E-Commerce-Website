@@ -1,0 +1,60 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'css/admin_page.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Admin Panel
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 text-uppercase text-secondary">Admin Panel</h2>
+                    <div class="d-flex flex-column align-items-center">
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/admin_comments" class="btn btn-primary btn-lg mb-3 w-100">Manage Comments</a>
+                        {% endif %}
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/admin_stock" class="btn btn-primary btn-lg mb-3 w-100">Manage Stock</a>
+                        {% endif %}
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/admin_orders" class="btn btn-secondary btn-lg mb-3 w-100">Manage Orders</a>
+                        {% endif %}
+                        {% if user.is_salesmanager or user.is_superuser %}
+                            <a href="/account/admin_revenue" class="btn btn-secondary btn-lg mb-3 w-100">Manage Revenues</a>
+                        {% endif %}
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/add_products" class="btn btn-secondary btn-lg mb-3 w-100">Add Products</a>
+                        {% endif %}
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/add_category" class="btn btn-secondary btn-lg mb-3 w-100">Add Category</a>
+                        {% endif %}
+                        {% if user.is_productmanager or user.is_superuser %}
+                            <a href="/account/add_brand" class="btn btn-secondary btn-lg mb-3 w-100">Add Brand</a>
+                        {% endif %}
+                        {% if user.is_salesmanager or user.is_superuser %}
+                            <a href="/account/receipts" class="btn btn-secondary btn-lg mb-3 w-100">Sort Receipts</a>
+                        {%endif%}
+                        {% if user.is_salesmanager or user.is_superuser %}
+                            <a href="/account/campaigns" class="btn btn-secondary btn-lg mb-3 w-100">Create Campaigns</a>
+                        {%endif%}
+                        {% if user.is_salesmanager or user.is_superuser %}
+                            <a href="/account/admin_price" class="btn btn-secondary btn-lg mb-3 w-100">Manage Prices</a>
+                        {%endif%}
+                        {% if user.is_salesmanager or user.is_superuser %}
+                            <a href="/account/admin_refund" class="btn btn-secondary btn-lg mb-3 w-100">Refund Requests</a>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

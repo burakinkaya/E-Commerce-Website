@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'css/address.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    My Cards
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+    <a class="btn btn-outline-secondary mt-3 mb-3" href="/account/profile">&#x2190; Back to Profile</a>
+
+    <h1 class="mt-3 fw-bold">My Credit Cards</h1>
+    <hr>
+    {% if cards %}
+        <div class="address-container">
+            {% for card in cards %}
+                {% if card.user == request.user %}
+                    <div class="address-box">
+
+                        {% if card.user == request.user %}
+                            <p><strong>The Name on the Credit Card:</strong> {{ card.cardName }}</p>
+                            <p><strong>Card Number:</strong> **** **** **** {{ card.cardNumber|slice:"-4:" }}</p>
+
+                            <p><strong>Card Nick Name:</strong> {{ card.cardNick }}</p>
+                            <form method="post" action="{% url 'delete_card' card.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn mt-3 btn-danger btn-sm">Delete</button>
+                            </form>
+                            </div>
+                            </div>
+                        {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No Credit Card found.</p>
+    {% endif %}
+
+    </div>
+    <hr>
+
+    <div class="container">
+        <h2 class="mt-3 fw-bold">Add a new Credit Card: </h2>
+        <form method="post" action="{% url 'add_card' %}">
+            {% csrf_token %}
+
+            <div class="form-field">
+                <label for="cardName">Name on Credit Card:</label>
+                <input class="form-control" type="text" id="cardName" name="cardName" placeholder="Ahmet..." required>
+            </div>
+
+            <div class="form-field">
+                <label for="cardNumber">Credit Card Number:</label>
+                <input class="form-control" type="text" id="cardNumber" name="cardNumber"
+                       pattern="\d{4} \d{4} \d{4} \d{4}" placeholder="3456 5678 7890 6789" required maxlength="19"
+                       oninput="formatCreditCardNumber(this)">
+            </div>
+
+            <script>
+                function formatCreditCardNumber(input) {
+                    var cleaned = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                    var match = cleaned.match(/^(\d{4})\s?(\d{4})\s?(\d{4})\s?(\d{4})$/);
+                    if (match) {
+                        input.value = `${match[1]} ${match[2]} ${match[3]} ${match[4]}`;
+                    }
+                }
+            </script>
+
+
+            <div class="form-field">
+                <label for="expiration">Expiration date:</label>
+                <input class="form-control" type="text" id="expiration" name="expiration" placeholder="11 2000" required
+                       maxlength="7" required>
+            </div>
+
+            <script>
+                // Get the input element
+                const expirationInput = document.getElementById('expiration');
+
+                // Add an event listener to listen for changes in the input value
+                expirationInput.addEventListener('input', function (event) {
+                    const input = event.target;
+                    const value = input.value;
+
+                    // Check if the value has 6 characters
+                    if (value.length === 6) {
+                        // Reformat the value as "MM YYYY"
+                        const formattedValue = value.substr(0, 2) + ' ' + value.substr(2);
+                        input.value = formattedValue;
+                    }
+                });
+            </script>
+
+
+            <div class="form-field">
+                <label for="cvc">CVC:</label>
+                <input class="form-control" type="text" id="cvc" name="cvc" pattern="\d{3}" required maxlength="3"
+                       required>
+            </div>
+
+            <div class="form-field">
+                <label for="cardNick">Card Nick Name:</label>
+                <input class="form-control" type="text" id="cardNick" name="cardNick" required>
+            </div>
+
+            <div class="form-field">
+                <input class="btn btn-success btn-block mt-3" type="submit" value="Save">
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

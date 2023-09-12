@@ -1,0 +1,136 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_orders.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Admin Orders
+{% endblock %}
+
+{% block content %}
+
+    <div class="container page">
+        <a class="btn btn-outline-secondary" href="/account/admin_page" style="margin-top: 0.5cm;">&#x2190; Back to Admin Panel</a>
+
+        <div class="manage-buttons " style="color: white" >
+        <a onclick="showOrders('processing-orders')" class="btn btn-primary">Processing Orders</a>
+        <a onclick="showOrders('in-transit-orders')" class="btn btn-secondary">In Transit Orders</a>
+        <a onclick="showOrders('delivered-orders')" class="btn btn-primary">Delivered Orders</a>
+        </div>
+
+        <div id="processing-orders">
+            <h5 class="order-heading" id="processing-orders" >Processing Orders:</h5>
+            {% for ord in orders %}
+                {% if not ord.is_refunded %}
+                    {% if not ord.in_transit %}
+                        {% if ord.complete %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                                    <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                                    <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                                    <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                                    <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                                    <form method="POST" action="{% url 'update_order_status' ord.id %}">
+                                        {% csrf_token %}
+                                        <label for="status-{{ ord.id }}"><strong>Order Status:</strong></label>
+                                        <select name="status" id="status-{{ ord.id }}" class="form-control status-select">
+                                            <option value="processing" {% if ord.complete %}selected{% endif %}>Processing</option>
+                                            <option value="in_transit" {% if ord.in_transit %}selected{% endif %}>In Transit</option>
+                                            <option value="delivered" {% if ord.delivered %}selected{% endif %}>Delivered</option>
+                                            <option value="refunded" {% if ord.is_refunded %}selected{% endif %}>Refunded</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary update-button">Update Status</button>
+                                    </form>
+                                    <a class="btn btn-primary receipt-button" href="{% url 'get_order_receipt' ord.id %}" style="margin-top: 0.5cm;"> See The Receipt</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div id="in-transit-orders" style="display: none;">
+            <h5 class="order-heading" id="in-transit-orders" style="color: white; font-weight: bold;">In Transit Orders:</h5>
+            {% for ord in orders %}
+                {% if not ord.is_refunded %}
+                    {% if not ord.delivered %}
+                        {% if ord.in_transit %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                                    <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                                    <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                                    <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                                    <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                                    <form method="POST" action="{% url 'update_order_status' ord.id %}">
+                                        {% csrf_token %}
+                                        <label for="status-{{ ord.id }}"><strong>Order Status:</strong></label>
+                                        <select name="status" id="status-{{ ord.id }}" class="form-control status-select">
+                                            <option value="processing" {% if ord.complete %}selected{% endif %}>Processing</option>
+                                            <option value="in_transit" {% if ord.in_transit %}selected{% endif %}>In Transit</option>
+                                            <option value="delivered" {% if ord.delivered %}selected{% endif %}>Delivered</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary update-button">Update Status</button>
+                                    </form>
+                                    <a class="btn btn-primary receipt-button" href="{% url 'get_order_receipt' ord.id %}" style="margin-top: 0.5cm;"> See The Receipt</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div id="delivered-orders" style="display: none;">
+            <h5  class="order-heading" id="delivered-orders" style="color: white; font-weight: bold;">Delivered Orders:</h5>
+            {% for ord in orders %}
+                {% if not ord.is_refunded %}
+                    {% if ord.delivered %}
+                        <!-- Your delivered orders card -->
+                        <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Customer Ordered:</strong> {{ ord.customer }}</p>
+                            <p class="card-text"><strong>Total Number of Products:</strong> {{ ord.get_cart_items }}</p>
+                            <p class="card-text"><strong>Order Details:</strong> {{ ord.get_cart_names }}</p>
+                            <p class="card-text"><strong>Total Pay:</strong> {{ ord.get_cart_total }}</p>
+                            <p class="card-text"><strong>Order id:</strong> {{ ord.id }}</p>
+                            <form method="POST" action="{% url 'update_order_status' ord.id %}">
+                                {% csrf_token %}
+                                <label for="status-{{ ord.id }}"><strong>Order Status:</strong></label>
+                                <select name="status" id="status-{{ ord.id }}" class="form-control status-select">
+                                    <option value="processing" {% if ord.complete %}selected{% endif %}>Processing</option>
+                                    <option value="in_transit" {% if ord.in_transit %}selected{% endif %}>In Transit</option>
+                                    <option value="delivered" {% if ord.delivered %}selected{% endif %}>Delivered</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary update-button">Update Status</button>
+                            </form>
+                            <a class="btn btn-primary receipt-button" href="{% url 'get_order_receipt' ord.id %}" style="margin-top: 0.5cm;"> See The Receipt</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+    function showOrders(id) {
+        const ids = ['processing-orders', 'in-transit-orders', 'delivered-orders']; // Added 'check-refunds'
+        for (let i = 0; i < ids.length; i++) {
+            const element = document.getElementById(ids[i]);
+            if (ids[i] === id) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    }
+    </script>
+
+
+
+{% endblock %}

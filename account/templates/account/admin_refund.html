@@ -1,0 +1,68 @@
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_orders.css' %}">
+{% endblock %}
+
+{% block page_tittle %}
+    Refund Requests
+{% endblock %}
+
+{% block content %}
+
+    <div class="container page">
+        <a class="btn btn-outline-secondary" href="/account/admin_page" style="margin-top: 0.5cm;">&#x2190; Back to Admin Panel</a>
+
+        <div class="manage-buttons " style="color: white" >
+            <a onclick="showOrders('check-refunds')" class="btn btn-primary">Check Refunds</a>
+        </div>
+
+            <div id="check-refunds" style="display: none;">
+            <h5  class="order-heading" id="check-refunds" style="color: white; font-weight: bold;">Refund Requests:</h5>
+            {% for ord in orders %}
+                {% if ord.delivered %}
+                    {% if ord.refund_requested %}
+                        <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Customer Username:</strong> {{ ord.customer.username }}</p>
+                            <p class="card-text"><strong>Order ID:</strong> {{ ord.id }}</p>
+                            <p class="card-text"><strong>Order Date:</strong> {{ ord.date_ordered }}</p>
+                            <p class="card-text"><strong>City:</strong> {{ ord.orderaddress.city }}</p>
+                            <p class="card-text"><strong>Province:</strong> {{ ord.orderaddress.province }}</p>
+                            <p class="card-text"><strong>Street:</strong> {{ ord.orderaddress.street }}</p>
+                            <p class="card-text"><strong>ZIP:</strong> {{ ord.orderaddress.zip }}</p>
+                            <p class="card-text"><strong>Phone Number:</strong> {{ ord.orderaddress.phone }}</p>
+                            <p class="card-text"><strong>Items Ordered:</strong> {{ ord.get_cart_names }}</p>
+                            <form method="POST" action="{% url 'refund_approval' ord.id %}">
+                                {% csrf_token %}
+                                <label for="is_refunded-{{ ord.id }}">Refund Approval:</label>
+                                <input type="checkbox" name="is_refunded" id="is_refunded-{{ ord.id }}" class="form-control is_approved-checkbox" value="true" {% if ord.is_refunded %}checked{% endif %}>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                            <a class="btn btn-primary receipt-button" href="{% url 'get_order_receipt' ord.id %}" style="margin-top: 0.5cm;"> See The Receipt</a>
+                        </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+    function showOrders(id) {
+        const ids = ['check-refunds']; // Added 'check-refunds'
+        for (let i = 0; i < ids.length; i++) {
+            const element = document.getElementById(ids[i]);
+            if (ids[i] === id) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    }
+    </script>
+
+
+
+{% endblock %}

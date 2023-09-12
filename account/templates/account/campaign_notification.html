@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campaign Alert</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .email-header {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .email-body {
+            padding: 20px;
+            background-color: #ffffff;
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h2>Campaign Alert</h2>
+        </div>
+        <div class="email-body">
+            <p>Hello {{ user_name }},</p>
+            <p>{{ status_message }}</p>
+            <h3>Product: {{ product.product_name }}</h3>
+            <p>Thank you for being a valuable customer🙏</p>
+        </div>
+    </div>
+</body>
+</html>
